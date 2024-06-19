@@ -62,12 +62,14 @@ def delete():
     data = request.json
     title = data.get('title')
     media_id = data.get('media_id')
-    for item in process_later[title]:
-        if item.id != media_id:
-            delete_item(item.key, item.id)
-            write_decision(removed=item)
-    write_decision(keeping=media_id)
-    return jsonify({'status': 'success'})
+    if title in process_later:
+        for part_id, part in process_later[title].items():
+            if part_id != media_id:
+                delete_item(part.key, part_id)
+                write_decision(removed=part)
+        write_decision(keeping=media_id)
+        return jsonify({'status': 'success'})
+    return jsonify({'status': 'error', 'message': 'Invalid request'}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
