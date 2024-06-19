@@ -4,11 +4,7 @@
   "FIND_DUPLICATE_FILEPATHS_ONLY": false,
   "PLEX_SERVER": "${PLEX_URL}",
   "PLEX_TOKEN": "${PLEX_TOKEN}",
-  "PLEX_LIBRARIES": [
-    "Movies",
-    "TV Shows",
-    "Anime"
-  ],
+  "PLEX_LIBRARIES": [],
   "SKIP_LIST": [
     "/Plex Versions/"
   ],
