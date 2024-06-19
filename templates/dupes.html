@@ -3,6 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Duplicate Files</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .actions {
+            text-align: center;
+        }
+    </style>
+    <script>
+        function deleteDuplicate(title, mediaId) {
+            fetch('/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title: title, media_id: mediaId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Duplicate deleted successfully.');
+                    location.reload();
+                } else {
+                    alert('Error deleting duplicate.');
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <h1>Duplicate Files</h1>
@@ -10,21 +47,23 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Parts</th>
+                <th>File Path</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for title, parts in dupes.items() %}
-                <tr>
-                    <td>{{ title }}</td>
-                    <td>
-                        <ul>
-                            {% for part_id, part in parts.items() %}
-                                <li>{{ part.file }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
+                {% for part_id, part in parts.items() %}
+                    {% for file_path in part.file %}
+                        <tr>
+                            <td>{{ title }}</td>
+                            <td>{{ file_path }}</td>
+                            <td class="actions">
+                                <button onclick="deleteDuplicate('{{ title }}', '{{ part_id }}')">Delete</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
             {% endfor %}
         </tbody>
     </table>
