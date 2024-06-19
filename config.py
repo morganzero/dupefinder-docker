@@ -10,7 +10,7 @@ config_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'conf
 base_config = {
     'PLEX_SERVER': os.getenv('PLEX_SERVER', 'https://plex.your-server.com'),
     'PLEX_TOKEN': os.getenv('PLEX_TOKEN', ''),
-    'PLEX_LIBRARIES': os.getenv('PLEX_LIBRARIES', '').split(','),
+    'PLEX_LIBRARIES': os.getenv('PLEX_LIBRARIES', '').split(',') if os.getenv('PLEX_LIBRARIES') else [],
     'AUDIO_CODEC_SCORES': {'Unknown': 0, 'wmapro': 200, 'mp2': 500, 'mp3': 1000, 'ac3': 1000, 'dca': 2000, 'pcm': 2500,
                            'flac': 2500, 'dca-ma': 4000, 'truehd': 4500, 'aac': 1000, 'eac3': 1250},
     'VIDEO_CODEC_SCORES': {'Unknown': 0, 'h264': 10000, 'h265': 5000, 'hevc': 5000, 'mpeg4': 500, 'vc1': 3000,
@@ -18,10 +18,10 @@ base_config = {
                            'msmpeg4v2': 100, 'msmpeg4v3': 100},
     'VIDEO_RESOLUTION_SCORES': {'Unknown': 0, '4k': 20000, '1080': 10000, '720': 5000, '480': 3000, 'sd': 1000},
     'FILENAME_SCORES': {},
-    'SKIP_LIST': os.getenv('SKIP_LIST', '').split(','),
+    'SKIP_LIST': os.getenv('SKIP_LIST', '').split(',') if os.getenv('SKIP_LIST') else [],
     'SCORE_FILESIZE': os.getenv('SCORE_FILESIZE', 'true').lower() == 'true',
-    'AUTO_DELETE': os.getenv('AUTO_DELETE', 'false').lower() == 'false',
-    'FIND_DUPLICATE_FILEPATHS_ONLY': os.getenv('FIND_DUPLICATE_FILEPATHS_ONLY', 'false').lower() == 'false'
+    'AUTO_DELETE': os.getenv('AUTO_DELETE', 'false').lower() == 'true',
+    'FIND_DUPLICATE_FILEPATHS_ONLY': os.getenv('FIND_DUPLICATE_FILEPATHS_ONLY', 'false').lower() == 'true'
 }
 cfg = None
 
