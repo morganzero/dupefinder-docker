@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for
 import subprocess
 import os
 import json
-from config import load_config, build_config, cfg, dump_config, upgrade_settings
+from config import load_config, cfg, dump_config, upgrade_settings
 from dupefinder import get_dupes, delete_item, write_decision, build_tabulated
 from tabulate import tabulate
 
