@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Found Duplicates</title>
+</head>
+<body>
+    <h1>Found Duplicates</h1>
+    {% for title, parts in dupes.items() %}
+        <h2>{{ title }}</h2>
+        <table>
+            <tr>
+                <th>Media ID</th>
+                <th>Action</th>
+            </tr>
+            {% for part_id, part in parts.items() %}
+                <tr>
+                    <td>{{ part_id }}</td>
+                    <td>
+                        <button onclick="deleteMedia('{{ title }}', '{{ part_id }}')">Delete</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+    <script>
+        function deleteMedia(title, media_id) {
+            fetch('/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title: title, media_id: media_id })
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
