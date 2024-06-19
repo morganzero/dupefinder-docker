@@ -8,6 +8,22 @@ from getpass import getpass
 
 config_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'config.json')
 
+class AttrConfig(AttrDict):
+    """
+    Simple AttrDict subclass to return None when requested attribute does not exist
+    """
+
+    def __init__(self, config):
+        super().__init__(config)
+
+    def __getattr__(self, item):
+        try:
+            return super().__getattr__(item)
+        except AttributeError:
+            pass
+        # Default behaviour
+        return None
+
 def replace_placeholders(config):
     plex_url = os.getenv('PLEX_URL', 'https://plex.your-server.com')
     plex_token = os.getenv('PLEX_TOKEN', '')
