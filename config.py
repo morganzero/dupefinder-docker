@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-
-
 import json
 import os
 import sys
@@ -11,9 +8,9 @@ from getpass import getpass
 
 config_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'config.json')
 base_config = {
-    'PLEX_SERVER': 'https://plex.your-server.com',
-    'PLEX_TOKEN': '',
-    'PLEX_LIBRARIES': {},
+    'PLEX_SERVER': os.getenv('PLEX_SERVER', 'https://plex.your-server.com'),
+    'PLEX_TOKEN': os.getenv('PLEX_TOKEN', ''),
+    'PLEX_LIBRARIES': os.getenv('PLEX_LIBRARIES', '').split(','),
     'AUDIO_CODEC_SCORES': {'Unknown': 0, 'wmapro': 200, 'mp2': 500, 'mp3': 1000, 'ac3': 1000, 'dca': 2000, 'pcm': 2500,
                            'flac': 2500, 'dca-ma': 4000, 'truehd': 4500, 'aac': 1000, 'eac3': 1250},
     'VIDEO_CODEC_SCORES': {'Unknown': 0, 'h264': 10000, 'h265': 5000, 'hevc': 5000, 'mpeg4': 500, 'vc1': 3000,
@@ -21,10 +18,10 @@ base_config = {
                            'msmpeg4v2': 100, 'msmpeg4v3': 100},
     'VIDEO_RESOLUTION_SCORES': {'Unknown': 0, '4k': 20000, '1080': 10000, '720': 5000, '480': 3000, 'sd': 1000},
     'FILENAME_SCORES': {},
-    'SKIP_LIST': [],
-    'SCORE_FILESIZE': True,
-    'AUTO_DELETE': False,
-    'FIND_DUPLICATE_FILEPATHS_ONLY': False
+    'SKIP_LIST': os.getenv('SKIP_LIST', '').split(','),
+    'SCORE_FILESIZE': os.getenv('SCORE_FILESIZE', 'true').lower() == 'true',
+    'AUTO_DELETE': os.getenv('AUTO_DELETE', 'false').lower() == 'false',
+    'FIND_DUPLICATE_FILEPATHS_ONLY': os.getenv('FIND_DUPLICATE_FILEPATHS_ONLY', 'false').lower() == 'false'
 }
 cfg = None
 
@@ -48,75 +45,15 @@ class AttrConfig(AttrDict):
 
 def prefilled_default_config(configs):
     default_config = base_config.copy()
-
-    # Set the token and server url
-    default_config['PLEX_SERVER'] = configs['url']
-    default_config['PLEX_TOKEN'] = configs['token']
-
-    # Set AUTO_DELETE config option
-    default_config['AUTO_DELETE'] = configs['auto_delete']
-
-    # sections
-    default_config['PLEX_LIBRARIES'] = [
-        'Movies',
-        'TV'
-    ]
-
-    # filename scores
-    default_config['FILENAME_SCORES'] = {
-        '*Remux*': 20000,
-        '*1080p*BluRay*': 15000,
-        '*720p*BluRay*': 10000,
-        '*WEB*NTB*': 5000,
-        '*WEB*VISUM*': 5000,
-        '*WEB*KINGS*': 5000,
-        '*WEB*CasStudio*': 5000,
-        '*WEB*SiGMA*': 5000,
-        '*WEB*QOQ*': 5000,
-        '*WEB*TROLLHD*': 2500,
-        '*REPACK*': 1500,
-        '*PROPER*': 1500,
-        '*WEB*TBS*': -1000,
-        '*HDTV*': -1000,
-        '*dvd*': -1000,
-        '*.avi': -1000,
-        '*.ts': -1000,
-        '*.vob': -5000
-    }
-
     return default_config
 
 
 def build_config():
     if not os.path.exists(config_path):
         print("Dumping default config to: %s" % config_path)
-
-        configs = dict(url='', token='', auto_delete=False)
-
-        # Get URL
-        configs['url'] = input("Plex Server URL: ")
-
-        # Get Credentials for plex.tv
-        user = input("Plex Username: ")
-        password = getpass('Plex Password: ')
-
-        # Get choice for Auto Deletion
-        auto_del = input("Auto Delete duplicates? [y/N] : ")
-        while auto_del.strip().lower() not in ['y', 'n']:
-            auto_del = input("Auto Delete duplicates? [y/N] : ")
-            if auto_del.strip().lower() == 'y':
-                configs['auto_delete'] = True
-            elif auto_del.strip().lower() == 'n':
-                configs['auto_delete'] = False
-
-        account = MyPlexAccount(user, password)
-        configs['token'] = account.authenticationToken
-
         with open(config_path, 'w') as fp:
-            json.dump(prefilled_default_config(configs), fp, sort_keys=True, indent=2)
-
+            json.dump(prefilled_default_config({}), fp, sort_keys=True, indent=2)
         return True
-
     else:
         return False
 
