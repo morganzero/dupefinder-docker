@@ -3,6 +3,10 @@ import subprocess
 import os
 import json
 from config import load_config, cfg, dump_config, upgrade_settings
+
+# Load configuration
+cfg = load_config()
+
 from dupefinder import get_dupes, delete_item, write_decision, build_tabulated
 from tabulate import tabulate
 
