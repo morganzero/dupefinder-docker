@@ -1,0 +1,5 @@
+Flask
+plexapi
+attrdict
+requests
+tabulate
