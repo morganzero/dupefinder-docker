@@ -87,5 +87,4 @@ base_config = {
 upgraded, cfg = upgrade_settings(base_config, cfg)
 if upgraded:
     dump_config(cfg)
-    print("New config options were added, adjust and restart!")
-    sys.exit(0)
+    print("New config options were added. The configuration has been updated and the script will continue execution.")
