@@ -1,41 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Found Duplicates</title>
+    <meta charset="UTF-8">
+    <title>Duplicate Files</title>
 </head>
 <body>
-    <h1>Found Duplicates</h1>
-    {% for title, parts in dupes.items() %}
-        <h2>{{ title }}</h2>
-        <table>
+    <h1>Duplicate Files</h1>
+    <table>
+        <thead>
             <tr>
-                <th>Media ID</th>
-                <th>Action</th>
+                <th>Title</th>
+                <th>Parts</th>
             </tr>
-            {% for part_id, part in parts.items() %}
+        </thead>
+        <tbody>
+            {% for title, parts in dupes.items() %}
                 <tr>
-                    <td>{{ part_id }}</td>
+                    <td>{{ title }}</td>
                     <td>
-                        <button onclick="deleteMedia('{{ title }}', '{{ part_id }}')">Delete</button>
+                        <ul>
+                            {% for part_id, part in parts.items() %}
+                                <li>{{ part.file }}</li>
+                            {% endfor %}
+                        </ul>
                     </td>
                 </tr>
             {% endfor %}
-        </table>
-    {% endfor %}
-    <script>
-        function deleteMedia(title, media_id) {
-            fetch('/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title: title, media_id: media_id })
-            }).then(response => {
-                if (response.ok) {
-                    location.reload();
-                }
-            });
-        }
-    </script>
+        </tbody>
+    </table>
+    <a href="/">Back to Home</a>
 </body>
 </html>
