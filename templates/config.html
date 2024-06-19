@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Configure Dupefinder</title>
+</head>
+<body>
+    <h1>Configuration</h1>
+    <form method="POST">
+        <label for="PLEX_SERVER">Plex Server URL:</label>
+        <input type="text" id="PLEX_SERVER" name="PLEX_SERVER" value="{{ config.PLEX_SERVER }}"><br>
+        <label for="PLEX_TOKEN">Plex Token:</label>
+        <input type="text" id="PLEX_TOKEN" name="PLEX_TOKEN" value="{{ config.PLEX_TOKEN }}"><br>
+        <label for="AUTO_DELETE">Auto Delete:</label>
+        <input type="checkbox" id="AUTO_DELETE" name="AUTO_DELETE" {% if config.AUTO_DELETE %}checked{% endif %}><br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
