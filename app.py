@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for
-import subprocess
 import os
-import json
 from config import load_config, dump_config, upgrade_settings
 
 # Load configuration
